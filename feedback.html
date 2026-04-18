@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feedback — MAISON ÉLARA</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── FEEDBACK-SPECIFIC ── */
+    .feedback-grid{padding:4rem 4rem 7rem;display:grid;grid-template-columns:3fr 2fr;gap:6rem}
+    .fb-form{display:flex;flex-direction:column;gap:2.5rem}
+
+    .star-chooser{display:flex;justify-content:center;gap:.75rem;margin-bottom:1rem}
+    .star-btn{background:none;border:none;cursor:none;font-size:2.5rem;color:rgba(184,152,106,.25);transition:color .2s,transform .2s;line-height:1}
+    .star-btn.active{color:var(--gold);transform:scale(1.15)}
+    .star-label{text-align:center;font-size:.72rem;font-weight:200;color:var(--muted);letter-spacing:.1em;min-height:1.2em}
+
+    .ratings-group{display:flex;flex-direction:column;gap:1.5rem}
+    .ratings-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--dark);margin-bottom:.5rem}
+    .rating-row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
+    .rating-row-label{font-size:.72rem;font-weight:200;color:var(--charcoal)}
+    .rating-row-val{font-size:.72rem;font-weight:300;color:var(--gold)}
+    .rating-slider{-webkit-appearance:none;appearance:none;width:100%;height:1px;background:rgba(184,152,106,.2);outline:none;cursor:none}
+    .rating-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--gold);border-radius:50%;cursor:none}
+    .rating-slider::-moz-range-thumb{width:14px;height:14px;background:var(--gold);border:none;border-radius:50%}
+
+    /* Sidebar */
+    .sidebar-block{background:var(--dark);padding:2.5rem;margin-bottom:2rem}
+    .sidebar-block h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--cream);margin-bottom:1.25rem}
+    .sidebar-block h3 em{font-style:italic;color:var(--gold-l)}
+    .sidebar-block p{font-size:.78rem;font-weight:200;line-height:1.9;color:rgba(245,240,232,.5)}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:.75rem 0;border-bottom:1px solid var(--border)}
+    .stat-row:last-child{border-bottom:none}
+    .stat-label{font-size:.72rem;font-weight:200;color:rgba(245,240,232,.5)}
+    .stat-val{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--gold)}
+    .review-bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
+    .review-bar-label{font-size:.65rem;color:rgba(245,240,232,.4);width:30px;text-align:right;flex-shrink:0}
+    .review-bar-track{flex:1;height:3px;background:rgba(184,152,106,.15)}
+    .review-bar-fill{height:100%;background:var(--gold)}
+    .review-bar-count{font-size:.62rem;color:rgba(245,240,232,.3);width:28px}
+    .sidebar-testimonial{background:var(--cream);padding:2.5rem;border-left:2px solid var(--gold)}
+    .testimonial-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;font-weight:300;color:var(--dark);line-height:1.6;margin-bottom:1rem}
+    .testimonial-meta{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+
+    /* Success screen */
+    .success-screen{display:none;min-height:100vh;background:var(--dark);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem}
+    .success-screen.show{display:flex}
+    .success-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:300;color:var(--cream);margin-bottom:1rem;animation:fadeUp 1s .2s both}
+    .success-title em{font-style:italic;color:var(--gold-l)}
+    .success-text{font-size:.88rem;font-weight:200;line-height:1.9;color:rgba(245,240,232,.5);max-width:440px;margin:0 auto 2.5rem;animation:fadeUp 1s .4s both}
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <div id="mainContent">
+    <nav id="navbar">
+      <a href="index.html" class="nav-logo">MAISON <span>É</span>LARA</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">Collections</a></li>
+        <li><a href="#">Lookbook</a></li>
+        <li><a href="aboutus.html">About</a></li>
+        <li><a href="contactus.html">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+    </nav>
+
+    <section class="page-hero">
+      <div class="page-hero-line"></div>
+      <p class="page-hero-tag">Share Your Experience</p>
+      <h1 class="page-hero-title">Your Voice<br><em>Matters</em></h1>
+      <p class="page-hero-subtitle">We take every piece of feedback to heart. Your words shape how we craft, serve, and improve.</p>
+    </section>
+
+    <!-- STAR RATING -->
+    <section style="padding:6rem 4rem 0;text-align:center" class="reveal">
+      <p class="eyebrow">Overall Rating</p>
+      <h2 class="serif-title" style="font-size:clamp(2rem,3vw,3rem);margin-bottom:1rem">How Was Your<br><em>Experience?</em></h2>
+      <p style="font-size:.82rem;font-weight:200;color:var(--muted);margin-bottom:2rem">Begin by giving us your overall impression, then share the details below.</p>
+      <div class="star-chooser">
+        <button class="star-btn" onclick="setStar(1)">★</button>
+        <button class="star-btn" onclick="setStar(2)">★</button>
+        <button class="star-btn" onclick="setStar(3)">★</button>
+        <button class="star-btn" onclick="setStar(4)">★</button>
+        <button class="star-btn" onclick="setStar(5)">★</button>
+      </div>
+      <p class="star-label" id="starLabel">Tap to rate your experience</p>
+    </section>
+
+    <!-- FEEDBACK FORM -->
+    <div class="feedback-grid reveal">
+      <div class="fb-form">
+        <div class="form-row">
+          <div class="form-group"><label>Your Name</label><input type="text" placeholder="Sophie Laurent"/></div>
+          <div class="form-group"><label>Email Address</label><input type="email" placeholder="sophie@example.com"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Order Reference (Optional)</label><input type="text" placeholder="ME-2026-00000"/></div>
+          <div class="form-group">
+            <label>Feedback Category</label>
+            <select>
+              <option disabled selected>Select category…</option>
+              <option>Product Quality</option><option>Delivery & Packaging</option><option>Client Service</option><option>Online Experience</option><option>In-Store Experience</option><option>Sizing & Fit</option><option>General</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ratings-group">
+          <p class="ratings-title">Rate Specific Aspects</p>
+          <div><div class="rating-row-header"><span class="rating-row-label">Product Quality</span><span class="rating-row-val" id="val-q">5 / 5</span></div><input type="range" class="rating-slider" min="1" max="5" value="5" oninput="document.getElementById('val-q').textContent=this.value+' / 5'"/></div>
+          <div><div class="rating-row-header"><span class="rating-row-label">Delivery Experience</span><span class="rating-row-val" id="val-d">4 / 5</span></div><input type="range" class="rating-slider" min="1" max="5" value="4" oninput="document.getElementById('val-d').textContent=this.value+' / 5'"/></div>
+          <div><div class="rating-row-header"><span class="rating-row-label">Client Service</span><span class="rating-row-val" id="val-s">5 / 5</span></div><input type="range" class="rating-slider" min="1" max="5" value="5" oninput="document.getElementById('val-s').textContent=this.value+' / 5'"/></div>
+          <div><div class="rating-row-header"><span class="rating-row-label">Value for Money</span><span class="rating-row-val" id="val-v">4 / 5</span></div><input type="range" class="rating-slider" min="1" max="5" value="4" oninput="document.getElementById('val-v').textContent=this.value+' / 5'"/></div>
+        </div>
+
+        <div class="form-group">
+          <label>What did you love?</label>
+          <div class="chip-group">
+            <div class="chip" onclick="this.classList.toggle('selected')">The fabric quality</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">The fit and cut</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">The packaging</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">The design</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">The service</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">Speed of delivery</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">Website experience</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">The atelier visit</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>What could we improve? (Optional)</label>
+          <div class="chip-group">
+            <div class="chip" onclick="this.classList.toggle('selected')">Wider size range</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">Faster shipping</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">More styles</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">Better communication</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">Website navigation</div>
+            <div class="chip" onclick="this.classList.toggle('selected')">Returns process</div>
+          </div>
+        </div>
+
+        <div class="form-group"><label>Your Feedback</label><textarea placeholder="In your own words, share your experience with us…"></textarea></div>
+
+        <div class="form-group">
+          <label>Would you recommend Maison Élara?</label>
+          <div class="chip-group" id="recGroup">
+            <div class="chip selected" onclick="selectSingle(this,'recGroup')">Absolutely</div>
+            <div class="chip" onclick="selectSingle(this,'recGroup')">Probably</div>
+            <div class="chip" onclick="selectSingle(this,'recGroup')">Unsure</div>
+            <div class="chip" onclick="selectSingle(this,'recGroup')">Probably not</div>
+          </div>
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" id="fbConsent"/>
+          <label for="fbConsent">I consent to Maison Élara using my feedback to improve their products and services. My feedback may be shared anonymously as a testimonial.</label>
+        </div>
+
+        <div>
+          <button type="button" class="btn-primary" onclick="submitFeedback()">
+            Submit Feedback <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div>
+        <div class="sidebar-block">
+          <h3>Our <em>Ratings</em></h3>
+          <p>Based on 1,240 verified client reviews across all channels.</p>
+          <br>
+          <div class="review-bar-row"><span class="review-bar-label">5★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:82%"></div></div><span class="review-bar-count">1,017</span></div>
+          <div class="review-bar-row"><span class="review-bar-label">4★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:12%"></div></div><span class="review-bar-count">149</span></div>
+          <div class="review-bar-row"><span class="review-bar-label">3★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:4%"></div></div><span class="review-bar-count">50</span></div>
+          <div class="review-bar-row"><span class="review-bar-label">2★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:1.5%"></div></div><span class="review-bar-count">19</span></div>
+          <div class="review-bar-row"><span class="review-bar-label">1★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:0.4%"></div></div><span class="review-bar-count">5</span></div>
+          <br>
+          <div class="stat-row"><span class="stat-label">Overall Score</span><span class="stat-val">4.8 / 5</span></div>
+          <div class="stat-row"><span class="stat-label">Recommend Rate</span><span class="stat-val">97%</span></div>
+          <div class="stat-row"><span class="stat-label">Repeat Clients</span><span class="stat-val">68%</span></div>
+        </div>
+
+        <div class="sidebar-testimonial">
+          <p style="color:var(--gold);font-size:.8rem;letter-spacing:.15em;margin-bottom:.75rem">★★★★★</p>
+          <p class="testimonial-text">"The coat arrived in the most beautiful box I have ever received. Even before I tried it on, I knew I had made the right choice."</p>
+          <p class="testimonial-meta">— Mireille T., Lyon &nbsp;|&nbsp; Verified Purchase</p>
+        </div>
+
+        <div class="sidebar-block" style="margin-top:2rem">
+          <h3>Why Share <em>Feedback?</em></h3>
+          <p>Your reviews guide our artisans, inform our designers, and shape the future of our house. Every word is read by our team — including Élara herself.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-top">
+        <div class="footer-brand"><a href="index.html" class="nav-logo">MAISON <span>É</span>LARA</a><p>A quiet house of considered fashion. Each piece is crafted with intention, worn with purpose, and kept for a lifetime.</p></div>
+        <div class="footer-col"><h4>Shop</h4><ul><li><a href="#">New Arrivals</a></li><li><a href="#">Collections</a></li><li><a href="#">Lookbook</a></li><li><a href="#">Sale</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="aboutus.html">About Us</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Careers</a></li><li><a href="contactus.html">Contact</a></li></ul></div>
+        <div class="footer-col"><h4>Help</h4><ul><li><a href="#">Sizing Guide</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="feedback.html">Feedback</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Maison Élara. All rights reserved.</p>
+        <div class="footer-socials"><a href="#">Instagram</a><a href="#">Pinterest</a><a href="#">LinkedIn</a></div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen">
+    <p style="color:var(--gold);font-size:3rem;margin-bottom:2rem;animation:fadeIn 1s">✦</p>
+    <h2 class="success-title">Merci,<br><em>Thank You</em></h2>
+    <p class="success-text">Your feedback has been received with gratitude. It will be read, considered, and used to make Maison Élara better with every stitch.</p>
+    <a href="index.html" class="btn-primary">Return to Boutique <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+
+  <script>
+    const c=document.getElementById('cursor'),r=document.getElementById('cursorRing');
+    document.addEventListener('mousemove',e=>{
+      c.style.left=e.clientX+'px';c.style.top=e.clientY+'px';
+      setTimeout(()=>{r.style.left=e.clientX+'px';r.style.top=e.clientY+'px'},80);
+    });
+    window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>80));
+    const obs=new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target)}}),{threshold:.1});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+    const labels=['','Poor','Fair','Good','Very Good','Outstanding'];
+    function setStar(n){
+      document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('active',i<n));
+      document.getElementById('starLabel').textContent=labels[n]+' — '+n+' out of 5 stars';
+    }
+    function selectSingle(el,id){
+      document.querySelectorAll('#'+id+' .chip').forEach(c=>c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    function submitFeedback(){
+      document.getElementById('mainContent').style.display='none';
+      document.getElementById('successScreen').classList.add('show');
+      scrollTo(0,0);
+    }
+  </script>
+</body>
+</html>
