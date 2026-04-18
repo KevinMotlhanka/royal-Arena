@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MAISON ÉLARA — Boutique</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── INDEX-SPECIFIC ── */
+    .hero{height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;position:relative}
+    .hero-left{background:var(--dark);display:flex;flex-direction:column;justify-content:center;padding:8rem 5rem 4rem;position:relative;overflow:hidden}
+    .hero-left::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b8986a' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")}
+    .hero-eyebrow{font-size:.65rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;opacity:0;animation:fadeUp 1s .3s forwards}
+    .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,5vw,5.5rem);font-weight:300;line-height:1.05;color:var(--cream);margin-bottom:2rem;opacity:0;animation:fadeUp 1s .5s forwards}
+    .hero-title em{color:var(--gold-l);font-style:italic;display:block}
+    .hero-desc{font-size:.85rem;font-weight:200;line-height:1.9;color:rgba(245,240,232,.6);max-width:340px;margin-bottom:3rem;opacity:0;animation:fadeUp 1s .7s forwards}
+    .hero-cta{opacity:0;animation:fadeUp 1s .9s forwards}
+    .hero-cta svg{transition:transform .3s}
+    .hero-cta:hover svg{transform:translateX(4px)}
+    .hero-right{position:relative;overflow:hidden}
+    .hero-img-overlay{position:absolute;inset:0;background:linear-gradient(to right,var(--dark),transparent 20%),linear-gradient(180deg,transparent 60%,rgba(26,23,20,.4))}
+    .hero-badge{position:absolute;bottom:3rem;right:3rem;width:120px;height:120px;border:1px solid rgba(184,152,106,.5);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--cream);animation:rotate 20s linear infinite}
+    .hero-badge span{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-l)}
+    .hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--muted);font-size:.6rem;letter-spacing:.25em;text-transform:uppercase}
+    .hero-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollLine 2s ease-in-out infinite}
+
+    .collections-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:auto auto;gap:1.5rem}
+    .collection-card:first-child{grid-row:1/3}
+    .collection-card:first-child .card-img-inner{min-height:500px}
+    .collection-card:not(:first-child) .card-img-inner{height:280px}
+
+    .featured{background:var(--dark);padding:7rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+    .featured-img{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#3a3430,#6b5540 50%,#4a3828);position:relative}
+    .featured-img::after{content:'';position:absolute;top:-1.5rem;right:-1.5rem;width:calc(100% - 3rem);height:calc(100% - 3rem);border:1px solid var(--border);pointer-events:none}
+    .featured-label{position:absolute;top:2rem;left:-2rem;background:var(--gold);color:var(--dark);padding:.4rem 1rem;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase}
+    .featured-content{color:var(--cream)}
+    .featured-price{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold);margin:1.5rem 0 2rem}
+    .featured-desc{font-size:.82rem;font-weight:200;line-height:1.9;color:rgba(245,240,232,.55);margin-bottom:2.5rem}
+    .featured-details{display:flex;flex-direction:column;gap:.75rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.5rem 0;margin-bottom:3rem}
+    .detail-row{display:flex;justify-content:space-between;font-size:.72rem;font-weight:200}
+    .detail-label{color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+    .detail-val{color:rgba(245,240,232,.8)}
+
+    .testimonial-section{padding:6rem 4rem;background:var(--cream);text-align:center}
+    .testimonial-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,2.5vw,2.6rem);font-weight:300;font-style:italic;color:var(--dark);max-width:800px;margin:0 auto 2rem;line-height:1.5}
+    .testimonial-author{font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+    .ornament{text-align:center;margin:2rem 0;color:var(--gold);font-size:1.2rem;letter-spacing:.5em}
+
+    .lookbook-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3rem}
+    .lookbook-item{overflow:hidden;cursor:none}
+    .lookbook-img{width:100%;aspect-ratio:3/4;transition:transform .5s}
+    .lookbook-item:hover .lookbook-img{transform:scale(1.03)}
+    .lookbook-item:nth-child(1) .lookbook-img{background:linear-gradient(160deg,#c4b4a0,#8a7060)}
+    .lookbook-item:nth-child(2) .lookbook-img{background:linear-gradient(160deg,#b0b4c8,#606880);margin-top:3rem}
+    .lookbook-item:nth-child(3) .lookbook-img{background:linear-gradient(160deg,#b8c4a0,#707a58)}
+    .lookbook-item:nth-child(4) .lookbook-img{background:linear-gradient(160deg,#d4c4b0,#a08070);margin-top:3rem}
+    .lookbook-name{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--dark);margin-top:.75rem}
+    .lookbook-price{font-size:.75rem;color:var(--muted);margin-top:.25rem}
+
+    .newsletter{background:var(--dark);padding:5rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+    .newsletter h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3vw,3rem);font-weight:300;color:var(--cream);margin-bottom:1rem}
+    .newsletter h2 em{color:var(--gold-l);font-style:italic}
+    .newsletter-form{display:flex;flex-direction:column;gap:1rem}
+    .newsletter-form input{background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--cream);padding:.75rem 0;font-family:'Jost',sans-serif;font-size:.82rem;font-weight:200;outline:none;transition:border-color .3s}
+    .newsletter-form input::placeholder{color:var(--muted)}
+    .newsletter-form input:focus{border-color:var(--gold)}
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">MAISON <span>É</span>LARA</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="#">Collections</a></li>
+      <li><a href="#">Lookbook</a></li>
+      <li><a href="aboutus.html">About</a></li>
+      <li><a href="contactus.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">New Collection — Spring 2026</p>
+      <h1 class="hero-title">Dressed in<br><em>Quiet Luxury</em></h1>
+      <p class="hero-desc">Every piece tells a story of careful hands, rare materials, and the kind of elegance that whispers rather than shouts.</p>
+      <a href="#" class="btn-primary hero-cta">Explore Collection <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-overlay"></div>
+      <div style="width:100%;height:100%;background:linear-gradient(135deg,#c8b49a,#9e8570 40%,#6b5744);display:flex;align-items:center;justify-content:center">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f5f0e8" stroke-width="0.5" style="opacity:.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="hero-badge">
+        <span style="font-size:1.2rem;font-family:'Cormorant Garamond',serif;font-style:italic">SS</span>
+        <span>'26</span>
+      </div>
+    </div>
+    <div class="hero-scroll"><div class="hero-scroll-line"></div><span>Scroll</span></div>
+  </section>
+
+  <div class="marquee-strip">
+    <div class="marquee-inner">
+      <span class="marquee-item">New Arrivals</span><span class="marquee-dot">✦</span><span class="marquee-item">Spring Collection</span><span class="marquee-dot">✦</span><span class="marquee-item">Hand-Crafted Pieces</span><span class="marquee-dot">✦</span><span class="marquee-item">Sustainable Luxury</span><span class="marquee-dot">✦</span><span class="marquee-item">Exclusive Fabrics</span><span class="marquee-dot">✦</span><span class="marquee-item">Made to Order</span><span class="marquee-dot">✦</span><span class="marquee-item">New Arrivals</span><span class="marquee-dot">✦</span><span class="marquee-item">Spring Collection</span><span class="marquee-dot">✦</span><span class="marquee-item">Hand-Crafted Pieces</span><span class="marquee-dot">✦</span><span class="marquee-item">Sustainable Luxury</span><span class="marquee-dot">✦</span><span class="marquee-item">Exclusive Fabrics</span><span class="marquee-dot">✦</span><span class="marquee-item">Made to Order</span><span class="marquee-dot">✦</span>
+    </div>
+  </div>
+
+  <section class="section reveal">
+    <div class="section-header">
+      <div><p class="eyebrow">Curated for you</p><h2 class="serif-title" style="font-size:clamp(2.2rem,3vw,3.2rem)">Our <em>Collections</em></h2></div>
+      <a href="#" class="view-all">View All <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="collections-grid">
+      <div class="collection-card"><div class="card-img-inner img-1"></div><div class="card-overlay"><p class="card-tag">Signature</p><h3 class="card-name">The Atelier Edit</h3><p class="card-count">48 pieces</p></div></div>
+      <div class="collection-card"><div class="card-img-inner img-2" style="height:280px"></div><div class="card-overlay"><p class="card-tag">Evening</p><h3 class="card-name">Golden Hour</h3><p class="card-count">22 pieces</p></div></div>
+      <div class="collection-card"><div class="card-img-inner img-3" style="height:280px"></div><div class="card-overlay"><p class="card-tag">Resort</p><h3 class="card-name">Côte Sauvage</h3><p class="card-count">30 pieces</p></div></div>
+      <div class="collection-card"><div class="card-img-inner img-4" style="height:280px"></div><div class="card-overlay"><p class="card-tag">Casual</p><h3 class="card-name">Everyday Ease</h3><p class="card-count">35 pieces</p></div></div>
+      <div class="collection-card"><div class="card-img-inner img-5" style="height:280px"></div><div class="card-overlay"><p class="card-tag">Accessories</p><h3 class="card-name">Refined Details</h3><p class="card-count">18 pieces</p></div></div>
+    </div>
+  </section>
+
+  <section class="featured reveal">
+    <div style="position:relative">
+      <div class="featured-img"></div>
+      <div class="featured-label">Featured Piece</div>
+    </div>
+    <div class="featured-content">
+      <p class="eyebrow">Object of Desire</p>
+      <h2 class="serif-title" style="font-size:clamp(2.5rem,3.5vw,4rem);color:var(--cream)">Le Manteau<br><em>Nocturne</em></h2>
+      <p class="featured-price">R 8,400</p>
+      <p class="featured-desc">Draped in double-faced Italian cashmere — hand-finished by artisans in Milan, each piece is signed and numbered.</p>
+      <div class="featured-details">
+        <div class="detail-row"><span class="detail-label">Material</span><span class="detail-val">Italian Cashmere, Double-Faced</span></div>
+        <div class="detail-row"><span class="detail-label">Origin</span><span class="detail-val">Crafted in Milan</span></div>
+        <div class="detail-row"><span class="detail-label">Edition</span><span class="detail-val">Limited — 50 pieces</span></div>
+        <div class="detail-row"><span class="detail-label">Delivery</span><span class="detail-val">4–6 weeks, made to order</span></div>
+      </div>
+      <a href="#" class="btn-primary">Add to Bag</a>
+      <a href="#" class="btn-outline" style="margin-left:1rem">Save</a>
+    </div>
+  </section>
+
+  <section class="testimonial-section reveal">
+    <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <p style="color:var(--gold);font-size:.9rem;letter-spacing:.2em;margin-bottom:1.5rem">★ ★ ★ ★ ★</p>
+    <blockquote class="testimonial-quote">"Maison Élara understands that true luxury is not about being seen — it is about how you feel when no one is watching."</blockquote>
+    <p class="testimonial-author">— Camille D., Paris &nbsp;|&nbsp; Loyal Client Since 2019</p>
+  </section>
+
+  <section class="section reveal">
+    <div class="section-header">
+      <div><p class="eyebrow">Season 2026</p><h2 class="serif-title" style="font-size:clamp(2.2rem,3vw,3.2rem)">The <em>Lookbook</em></h2></div>
+      <a href="#" class="view-all">Full Lookbook <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="lookbook-grid">
+      <div class="lookbook-item"><div class="lookbook-img"></div><p class="lookbook-name">Boucle Jacket — Ivory</p><p class="lookbook-price">R 4,200</p></div>
+      <div class="lookbook-item"><div class="lookbook-img"></div><p class="lookbook-name">Silk Trousers — Sage</p><p class="lookbook-price">R 2,800</p></div>
+      <div class="lookbook-item"><div class="lookbook-img"></div><p class="lookbook-name">Linen Dress — Sand</p><p class="lookbook-price">R 3,600</p></div>
+      <div class="lookbook-item"><div class="lookbook-img"></div><p class="lookbook-name">Cashmere Wrap — Camel</p><p class="lookbook-price">R 5,100</p></div>
+    </div>
+  </section>
+
+  <section class="newsletter reveal">
+    <div>
+      <p class="eyebrow">Stay in the Know</p>
+      <h2>Private <em>Access</em></h2>
+      <p style="margin-top:1rem;font-size:.82rem;font-weight:200;line-height:1.9;color:rgba(245,240,232,.5)">Join our circle for early access, exclusive invitations, and stories from behind the atelier.</p>
+    </div>
+    <div class="newsletter-form">
+      <input type="text" placeholder="Your Name"/>
+      <input type="email" placeholder="Your Email Address"/>
+      <button class="btn-primary" type="button" style="align-self:flex-start;margin-top:.5rem;border:none">Subscribe <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      <p style="font-size:.62rem;color:rgba(245,240,232,.25);font-weight:200">Your details are kept private. Unsubscribe at any time.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand"><a href="index.html" class="nav-logo">MAISON <span>É</span>LARA</a><p>A quiet house of considered fashion. Each piece is crafted with intention, worn with purpose, and kept for a lifetime.</p></div>
+      <div class="footer-col"><h4>Shop</h4><ul><li><a href="#">New Arrivals</a></li><li><a href="#">Collections</a></li><li><a href="#">Lookbook</a></li><li><a href="#">Sale</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="aboutus.html">About Us</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Careers</a></li><li><a href="contactus.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Help</h4><ul><li><a href="#">Sizing Guide</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="feedback.html">Feedback</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Maison Élara. All rights reserved.</p>
+      <div class="footer-socials"><a href="#">Instagram</a><a href="#">Pinterest</a><a href="#">LinkedIn</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const c=document.getElementById('cursor'),r=document.getElementById('cursorRing');
+    document.addEventListener('mousemove',e=>{
+      c.style.left=r.style.left=e.clientX+'px'; // immediate for dot
+      c.style.top=e.clientY+'px';
+      setTimeout(()=>{r.style.left=e.clientX+'px';r.style.top=e.clientY+'px'},80);
+    });
+    window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>80));
+    const obs=new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target)}}),{threshold:.1});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  </script>
+</body>
+</html>
